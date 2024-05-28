@@ -11,23 +11,18 @@
 	let board = $state<Array<Array<'X' | 'O' | ''>>>(initalBoard());
 
 	let won = $derived(() => {
-		for (let x = 0; x < board.length; x++) {
-			if (board[x][0] === '') continue;
-			if (board[x][0] === board[x][1] && board[x][1] === board[x][2]) {
-				return { current: board[x][0], won: true };
-			}
-		}
-		for (let y = 0; y < board.length; y++) {
-			if (board[0][y] === '') continue;
-			if (board[0][y] === board[1][y] && board[1][y] === board[2][y]) {
-				return { current: board[0][y], won: true };
+		const checkWin = (a: string, b: string, c: string) => a !== '' && a === b && b === c;
+		for (let i = 0; i < 3; i++) {
+			if (checkWin(board[i][0], board[i][1], board[i][2])) {
+				return { current: board[i][0], won: true };
+			} else if (checkWin(board[0][i], board[1][i], board[2][i])) {
+				return { current: board[0][i], won: true };
 			}
 		}
 
-		if (board[0][0] !== '' && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+		if (checkWin(board[0][0], board[1][1], board[2][2])) {
 			return { current: board[0][0], won: true };
-		}
-		if (board[2][0] !== '' && board[2][0] === board[1][1] && board[1][1] === board[0][2]) {
+		} else if (checkWin(board[2][0], board[1][1], board[0][2])) {
 			return { current: board[2][0], won: true };
 		}
 
@@ -47,7 +42,7 @@
 				{#each row as cell, y}
 					<button
 						onclick={() => {
-							if (cell !== '') return;
+							if (cell !== '' || won().won) return;
 							turn === 'X' ? (board[x][y] = 'X') : (board[x][y] = 'O');
 							if (turn === 'X') {
 								turn = 'O';
@@ -55,7 +50,7 @@
 								turn = 'X';
 							}
 						}}
-						class="aspect-square w-full border-t bg-white hover:bg-secondary">{cell}</button
+						class="aspect-square w-full border-t bg-white text-xl hover:bg-secondary">{cell}</button
 					>
 				{/each}
 			</div>
