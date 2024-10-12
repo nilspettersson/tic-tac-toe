@@ -61,4 +61,12 @@
 			<p class="py-6 text-2xl font-bold text-green-500">{won().current} Won</p>
 		{/if}
 	</div>
+	<div>
+		<p class="py-6 text-2xl font-bold">{turn}</p>
+		<button
+			onclick={() => {
+				turn = 'O';
+			}}>asd</button
+		>
+	</div>
 </div>
